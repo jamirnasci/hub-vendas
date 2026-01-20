@@ -29,7 +29,7 @@ public class SaleService {
     		return sr.save(saleFound);
     	});
     }
-    public List<Sale> findByCreatedAt(LocalDateTime start, LocalDateTime end){
-    	return sr.findByCreatedAt(start, end);
+    public List<Sale> findByCreatedAtAndUser(LocalDateTime start, LocalDateTime end, Long iduser){
+    	return sr.findByCreatedAtAndUser(start, end, iduser);
     }
 }

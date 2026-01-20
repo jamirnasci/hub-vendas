@@ -7,9 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.jamir.hubvendas.model.Customer;
+import com.jamir.hubvendas.model.User;
 
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long>{
     @Query(value = "SELECT * FROM customer WHERE user_id = :userId LIMIT :limit OFFSET :offset", nativeQuery = true)
     public List<Customer> findCustomerWithPagination(int offset, Long userId, int limit);
+    public List<Customer> findByUser(User user);
 }

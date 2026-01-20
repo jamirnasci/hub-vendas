@@ -13,6 +13,6 @@ import com.jamir.hubvendas.model.Sale;
 public interface SaleRepository extends JpaRepository<Sale, Long>{
     @Query(value = "SELECT * FROM sale WHERE user_id = :userId LIMIT :limit OFFSET :offset", nativeQuery = true)
     public List<Sale> findSalesWithPagination(int offset, Long userId, int limit);
-    @Query(value = "SELECT * FROM sale WHERE created_at BETWEEN :start AND :end", nativeQuery = true)
-    public List<Sale> findByCreatedAt(LocalDateTime start, LocalDateTime end);
+    @Query(value = "SELECT * FROM sale WHERE created_at BETWEEN :start AND :end AND user_id = :iduser", nativeQuery = true)
+    public List<Sale> findByCreatedAtAndUser(LocalDateTime start, LocalDateTime end, Long iduser);    
 }

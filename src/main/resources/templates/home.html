@@ -2,158 +2,190 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Home</title>
+	<link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
-    <div th:replace="~{fragments/appTopBar :: appTopBar}"></div>
+	<div th:replace="~{fragments/appTopBar :: appTopBar}"></div>
 
-    <div class="container pb-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="fw-bold text-dark"><i class="bi bi-speedometer2 me-2"></i>Dashboard de Vendas</h3>
-            <span class="badge bg-white text-dark shadow-sm p-2"
-                th:text="${#temporals.format(#temporals.createNow(), 'dd/MM/yyyy HH:mm')}">19/01/2026</span>
-        </div>
+	<div class="container pb-5">
+		<div class="d-flex justify-content-between align-items-center mb-4">
+			<h3 class="fw-bold text-dark">
+				<i class="bi bi-speedometer2 me-2"></i>Dashboard de Vendas
+			</h3>
+			<span class="badge bg-white text-dark shadow-sm p-2"
+				th:text="${#temporals.format(#temporals.createNow(), 'dd/MM/yyyy HH:mm')}">19/01/2026</span>
+		</div>
+		<div class="d-flex align-items-end">
+			<div class="m-1">
+				<strong>Início</strong> <input class="form-control" type="date" id="startDate" />
+			</div>
+			<div class="m-1">
+				<strong>Fim</strong> <input class="form-control" type="date" id="endDate" />
+			</div>
+			<div class="m-1">
+				<input class="btn btn-primary" type="button" onclick="loadDashboard()" value="Buscar" />
+			</div>
+		</div>
 
-        <div class="row g-3 mb-4">
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body">
-                        <h6 class="text-muted mb-2">Total de Vendas</h6>
-                        <h2 class="fw-bold mb-0" id="totalSales"></h2>
-                        <small class="text-success"><i class="bi bi-arrow-up"></i> +12% este mês</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body">
-                        <h6 class="text-muted mb-2">Receita Bruta</h6>
-                        <h2 class="fw-bold mb-0" id="faturamento"></h2>
-                        <small class="text-primary"><i class="bi bi-cash-stack"></i> Valor acumulado</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body">
-                        <h6 class="text-muted mb-2">Clientes Ativos</h6>
-                        <h2 class="fw-bold mb-0">45</h2>
-                        <small class="text-info"><i class="bi bi-people"></i> Base de dados</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body">
-                        <h6 class="text-muted mb-2">Produtos em Estoque</h6>
-                        <h2 class="fw-bold mb-0" id="productsCount"></h2>
-                        <small class="text-warning"><i class="bi bi-box-seam"></i> Itens cadastrados</small>
-                    </div>
-                </div>
-            </div>
-        </div>
+		<div class="row g-3 mb-4">
+			<div class="col-md-3">
+				<div class="card border-0 shadow-sm">
+					<div class="card-body">
+						<h6 class="text-muted mb-2">Total de Vendas</h6>
+						<h2 class="fw-bold mb-0" id="totalSales"></h2>
+						<small class="text-success"><i class="bi bi-arrow-up"></i>
+							+12% este mês</small>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="card border-0 shadow-sm">
+					<div class="card-body">
+						<h6 class="text-muted mb-2">Receita Bruta</h6>
+						<h2 class="fw-bold mb-0" id="faturamento"></h2>
+						<small class="text-primary"><i class="bi bi-cash-stack"></i>
+							Valor acumulado</small>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="card border-0 shadow-sm">
+					<div class="card-body">
+						<h6 class="text-muted mb-2">Clientes Ativos</h6>
+						<h2 class="fw-bold mb-0">45</h2>
+						<small class="text-info"><i class="bi bi-people"></i> Base
+							de dados</small>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3">
+				<div class="card border-0 shadow-sm">
+					<div class="card-body">
+						<h6 class="text-muted mb-2">Produtos em Estoque</h6>
+						<h2 class="fw-bold mb-0" id="productsCount"></h2>
+						<small class="text-warning"><i class="bi bi-box-seam"></i>
+							Itens cadastrados</small>
+					</div>
+				</div>
+			</div>
+		</div>
 
-        <div class="row g-4">
-            <div class="col-lg-8">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-header bg-white py-3">
-                        <h6 class="mb-0 fw-bold">Status das vendas</h6>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="statusChart" height="300"></canvas>
-                    </div>
-                </div>
-            </div>
+		<div class="row g-4">
+			<div class="col-lg-8">
+				<div class="card border-0 shadow-sm h-100">
+					<div class="card-header bg-white py-3">
+						<h6 class="mb-0 fw-bold">Status das vendas</h6>
+					</div>
+					<div class="card-body">
+						<canvas id="statusChart" height="300"></canvas>
+					</div>
+				</div>
+			</div>
 
-            <div class="col-lg-4">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-header bg-white py-3">
-                        <h6 class="mb-0 fw-bold">Métodos de Pagamento</h6>
-                    </div>
-                    <div class="card-body d-flex align-items-center">
-                        <canvas id="paymentChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+			<div class="col-lg-4">
+				<div class="card border-0 shadow-sm h-100">
+					<div class="card-header bg-white py-3">
+						<h6 class="mb-0 fw-bold">Métodos de Pagamento</h6>
+					</div>
+					<div class="card-body d-flex align-items-center">
+						<canvas id="paymentChart"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <script th:inline="javascript">
-        fetch('/dashboard', {
-            method: 'GET',
-        }).then((res) => {
-            res.json()
-                .then((dashboardData) => {
-                    const ctxSales = document.getElementById('statusChart').getContext('2d');
-                    new Chart(ctxSales, {
-                        type: 'bar',
-                        data: {
-                            labels: ['CONCLUÍDA', 'PENDENTE', 'REPROVADA'],
-                            datasets: [{
-                                label: 'Status das Vendas',
-                                data: [
-                                    dashboardData.concluida,
-                                    dashboardData.pendente,
-                                    dashboardData.reprovada
-                                ],
-                                backgroundColor: [
-                                    '#198754',  // CONCLUÍDA - verde
-                                    '#ffc107',  // PENDENTE - amarelo
-                                    '#dc3545'   // REPROVADA - vermelho
-                                ]
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    display: false  // Opcional: esconder a legenda já que as cores já identificam
-                                }
-                            },
-                            scales: {
-                                y: {
-                                    beginAtZero: true
-                                }
-                            }
-                        }
-                    });
+	<script th:inline="javascript">
+		let salesChartStatus = null
+		let paymentChartStatus = null
 
-                    const ctxPayment = document.getElementById('paymentChart').getContext('2d');
-                    new Chart(ctxPayment, {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['À VISTA', 'CONSÓRCIO', 'FINANCIAMENTO'],
-                            datasets: [{
-                                data: [
-                                    dashboardData.aVista,
-                                    dashboardData.consorcio,
-                                    dashboardData.financiamento
-                                ],
-                                backgroundColor: ['#198754', '#0d6efd', '#ffc107']
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: { position: 'bottom' }
-                            }
-                        }
-                    });
-                    document.getElementById('totalSales').innerHTML = dashboardData.totalSales
-                    document.getElementById('productsCount').innerHTML = dashboardData.productsCount
-                    document.getElementById('faturamento').innerHTML = 'R$ ' + Number(dashboardData.faturamento).toLocaleString('pt-br', {minimumFractionDigits: 2})
-                    
-                })
-        })
+		function loadDashboard() {
+			const startDate = document.getElementById('startDate').value
+			const endDate = document.getElementById('endDate').value
 
-    </script>
+			fetch(`/dashboard?start=${startDate}&end=${endDate}`, {
+				method: 'GET',				
+			}).then((res) => {
+				res.json()
+					.then((dashboardData) => {
+						if(salesChartStatus != null){
+							salesChartStatus.destroy()
+						}
+						if(paymentChartStatus != null){
+							paymentChartStatus.destroy()
+						}
+						const ctxSales = document.getElementById('statusChart').getContext('2d');						
+						salesChartStatus = new Chart(ctxSales, {
+							type: 'bar',
+							data: {
+								labels: ['CONCLUÍDA', 'PENDENTE', 'REPROVADA'],
+								datasets: [{
+									label: 'Status das Vendas',
+									data: [
+										dashboardData.concluida,
+										dashboardData.pendente,
+										dashboardData.reprovada
+									],
+									backgroundColor: [
+										'#198754',  // CONCLUÍDA - verde
+										'#ffc107',  // PENDENTE - amarelo
+										'#dc3545'   // REPROVADA - vermelho
+									]
+								}]
+							},
+							options: {
+								responsive: true,
+								maintainAspectRatio: false,
+								plugins: {
+									legend: {
+										display: false  // Opcional: esconder a legenda já que as cores já identificam
+									}
+								},
+								scales: {
+									y: {
+										beginAtZero: true
+									}
+								}
+							}
+						});
+
+						const ctxPayment = document.getElementById('paymentChart').getContext('2d');
+						paymentChartStatus = new Chart(ctxPayment, {
+							type: 'doughnut',
+							data: {
+								labels: ['À VISTA', 'CONSÓRCIO', 'FINANCIAMENTO'],
+								datasets: [{
+									data: [
+										dashboardData.aVista,
+										dashboardData.consorcio,
+										dashboardData.financiamento
+									],
+									backgroundColor: ['#198754', '#0d6efd', '#ff770f']
+								}]
+							},
+							options: {
+								responsive: true,
+								plugins: {
+									legend: { position: 'bottom' }
+								}
+							}
+						});
+						document.getElementById('totalSales').innerHTML = dashboardData.totalSales
+						document.getElementById('productsCount').innerHTML = dashboardData.productsCount
+						document.getElementById('faturamento').innerHTML = 'R$ ' + Number(dashboardData.faturamento).toLocaleString('pt-br', { minimumFractionDigits: 2 })
+
+					})
+			})
+		}
+		loadDashboard()
+	</script>
 
 </body>
 

@@ -29,7 +29,7 @@ public class Sale {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private SaleStatus status = SaleStatus.PENDENTE;
+    private SaleStatus status = SaleStatus.PENDENTE;    
 
     @ManyToOne()
     @JoinColumn(name = "customer_id")

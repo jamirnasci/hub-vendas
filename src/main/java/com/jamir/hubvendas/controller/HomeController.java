@@ -2,18 +2,21 @@ package com.jamir.hubvendas.controller;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
+import com.jamir.hubvendas.config.UserPrincipal;
 import com.jamir.hubvendas.model.PaymentMethods;
 import com.jamir.hubvendas.model.Product;
 import com.jamir.hubvendas.model.Sale;
@@ -35,12 +38,14 @@ public class HomeController {
 
     @GetMapping("/dashboard")
     public ResponseEntity<Map<String, Object>> dashboard(
-            @RequestParam(name = "start", required = false) LocalDateTime start,
-            @RequestParam(name = "end", required = false) LocalDateTime end) {
+            @RequestParam(name = "start", required = false) LocalDate start,
+            @RequestParam(name = "end", required = false) LocalDate end,
+            @AuthenticationPrincipal UserPrincipal user
+        ) {
         HashMap<String, Object> res = new HashMap<>();
-        start = start == null ? LocalDateTime.now().minusDays(30) : start;
-        end = end == null ? LocalDateTime.now() : end;
-        List<Sale> sales = ss.findByCreatedAt(start, end);
+        LocalDateTime startDate = start == null ? LocalDateTime.now().minusDays(30) : start.atStartOfDay();
+        LocalDateTime endDate = end == null ? LocalDateTime.now() : end.atTime(LocalTime.MAX);
+        List<Sale> sales = ss.findByCreatedAtAndUser(startDate, endDate, user.getId());
         List<Product> products = ps.findAll();
 
         int productsCount = 0;
@@ -59,9 +64,9 @@ public class HomeController {
         int reprovada = 0;
 
         for (Sale s : sales) {
-            BigDecimal precoBase = s.getProduct().getPrice(); // já é BigDecimal
+            BigDecimal precoBase = s.getProduct().getPrice();
 
-            BigDecimal desconto = BigDecimal.valueOf(s.getOff()) // off é double
+            BigDecimal desconto = BigDecimal.valueOf(s.getOff())
                     .divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP);
 
             BigDecimal fator = BigDecimal.ONE.subtract(desconto);

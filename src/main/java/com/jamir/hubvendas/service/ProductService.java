@@ -24,7 +24,7 @@ public class ProductService {
 
     public List<Product> findAll(){
         return pr.findAll();
-    }
+    }    
     
     public List<Product> findWithPagination(int offset, int limit){
         return pr.findWithPagination(offset, limit);

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jamir.hubvendas.model.Customer;
+import com.jamir.hubvendas.model.User;
 import com.jamir.hubvendas.repository.CustomerRepository;
 
 @Service
@@ -18,6 +19,10 @@ public class CustomerService {
     public List<Customer> findAll(){
         return cr.findAll();
     }
+
+    public List<Customer> findByUser(User user){
+        return cr.findByUser(user);
+    }    
 
     public Optional<Customer> findById(Long id){
         return cr.findById(id);

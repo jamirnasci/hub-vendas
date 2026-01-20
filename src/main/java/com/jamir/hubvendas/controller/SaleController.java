@@ -32,7 +32,7 @@ public class SaleController {
     @GetMapping("/sale")
     public ModelAndView sale(@RequestParam(name = "offset", required = false) Integer offset, @AuthenticationPrincipal UserPrincipal user){
         ModelAndView mv = new ModelAndView("sale/saleSection");
-        List<Customer> customers = cs.findAll();
+        List<Customer> customers = cs.findByUser(user.getUser());
         List<Product> products = ps.findAll();
         offset = (offset == null) ? 0 : offset;
         List<Sale> sales = ss.findSalesWithPagination(offset, user.getId(), 5);
