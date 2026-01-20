@@ -1,0 +1,97 @@
+-- CREATE SCHEMA hubvendas;
+
+CREATE TABLE IF NOT EXISTS usuario(
+    idusuario INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(11) NOT NULL UNIQUE,
+    telefone VARCHAR(45) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    senha VARCHAR(255) NOT NULL,
+    role ENUM("adm", "user") NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT NOW(),
+    updated_at DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW()
+);
+
+CREATE TABLE IF NOT EXISTS tarefa(
+    idtarefa INT PRIMARY KEY AUTO_INCREMENT,
+    titulo VARCHAR(100) NOT NULL,
+    status ENUM("CONCLUIDA", "CANCELADA", "PENDENTE") NOT NULL DEFAULT "PENDENTE",
+    data DATETIME NOT NULL,
+    usuario_id INT NOT NULL,
+    criador_id INT NOT NULL,
+    role ENUM("adm", "user") NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT NOW(),
+    updated_at DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+    FOREIGN KEY (usuario_id) REFERENCES usuario(idusuario),
+    FOREIGN KEY (criador_id) REFERENCES usuario(idusuario)
+);
+
+CREATE TABLE IF NOT EXISTS cliente(
+    idcliente INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(11) NOT NULL UNIQUE,
+    telefone VARCHAR(45) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    cep VARCHAR(8) NOT NULL,
+    estado VARCHAR(45) NOT NULL,
+    cidade VARCHAR(45) NOT NULL,
+    bairro VARCHAR(45) NOT NULL,
+    rua VARCHAR(45) NOT NULL,
+    num_apto INT NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT NOW(),
+    updated_at DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW()
+);
+
+CREATE TABLE IF NOT EXISTS categoria(
+	idcategoria INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL UNIQUE,
+	created_at DATETIME NOT NULL DEFAULT NOW(),
+    updated_at DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW()
+);
+
+CREATE TABLE IF NOT EXISTS marca(
+	idmarca INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL UNIQUE,
+	created_at DATETIME NOT NULL DEFAULT NOW(),
+    updated_at DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW()
+);
+
+CREATE TABLE IF NOT EXISTS produto(
+    idproduto INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    preco DECIMAL(10,2) NOT NULL,
+    descricao MEDIUMTEXT NOT NULL,
+    img VARCHAR(255),
+    marca_id INT NOT NULL,
+    categoria_id INT NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT NOW(),
+    updated_at DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+    FOREIGN KEY (marca_id) REFERENCES marca(idmarca),
+    FOREIGN KEY (categoria_id) REFERENCES categoria(idcategoria)
+);
+
+CREATE TABLE IF NOT EXISTS venda(
+	idvenda INT PRIMARY KEY AUTO_INCREMENT,
+    status ENUM("APROVADA", "REPROVADA", "PENDENTE") NOT NULL DEFAULT "PENDENTE",
+    metodo_pag ENUM("CONSORCIO", "FINANCIAMENTO", "A VISTA") NOT NULL,
+    parcelas INT NOT NULL,
+    usuario_id INT NOT NULL,
+    cliente_id INT NOT NULL,
+    produto_id INT NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT NOW(),
+    updated_at DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW(),
+    FOREIGN KEY (usuario_id) REFERENCES usuario(idusuario),
+    FOREIGN KEY (cliente_id) REFERENCES cliente(idcliente),
+    FOREIGN KEY (produto_id) REFERENCES produto(idproduto)
+);
+
+CREATE TABLE IF NOT EXISTS campanha(
+	idcampanha INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    data_inicio DATETIME NOT NULL DEFAULT NOW(),
+    data_fim DATETIME NOT NULL,
+    descricao VARCHAR(255) NOT NULL,
+    img VARCHAR(255),
+	created_at DATETIME NOT NULL DEFAULT NOW(),
+    updated_at DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW()
+);

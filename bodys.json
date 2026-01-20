@@ -1,0 +1,17 @@
+[
+    {
+        "name": "Jamir Nascimento Cardoso",
+        "email": "jamir@gmail.com",
+        "phone": "91983733745",
+        "password": "123456",
+        "role": "ADM",
+        "status": "ATIVO"
+    },
+    {
+        "name": "Notebook Lenovo",
+        "price": 1800.50,
+        "description": "Notebook Lenovo i3 2120",
+        "imgUrl": "",
+        "quantity": 30
+    }
+]
